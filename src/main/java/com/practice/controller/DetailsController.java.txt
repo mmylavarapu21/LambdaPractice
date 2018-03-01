@@ -1,0 +1,14 @@
+@Controller
+
+public class DetailsController {
+
+	@Autowired
+	private AddPersonService addPersonService;
+	
+	@RequestMapping(value = "/addDetails", method = RequestMethod.POST)	
+public @ResponseBody boolean createPersonData(@RequestBody JSONObject personData) {
+		return addPersonService.setPersonDetails(personData);	
+		}
+	}
+
+‌

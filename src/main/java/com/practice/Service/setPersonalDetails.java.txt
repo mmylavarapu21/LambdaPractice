@@ -1,0 +1,36 @@
+@Service
+public class AddPersonService {
+
+	@Autowired
+	CacheManagerImpl cacheManagerImpl;
+
+	public boolean setPersonDetails(JSONObject personData) {
+		try {
+			
+			JsonObject personsData = new Gson().fromJson(personData, JsonObject.class);
+			boolean result = Stream.of(personData.toString)
+					.allMatch(Pattern.compile("(\{)+(([A-Z, a-z])+(\:)+([A-Z, a-z])+(\,)){4}(\})")
+					.asPredicate());
+			if(result){
+				Predicate<String> emailFilter = Pattern
+                                        .compile("^(.+)@example.com$")
+                                        .asPredicate();
+										
+				boolean finalResult = personData.get("email").stream().allMatch(emailFilter);
+				setData(personData);
+				return finalResult;
+			}
+		} catch (Exception e) {
+			LOG.error("Exception occurred while setting personData: ", e);
+		}
+		return false;
+	}
+	
+	private void setData(JSONObject details){
+			Iterator<?> keys = details.keys();
+		while( keys.hasNext() ) {
+			cacheManagerImpl.setValue((String)keys.next(), details.get((String)keys.next()));
+		}
+	}
+	
+	

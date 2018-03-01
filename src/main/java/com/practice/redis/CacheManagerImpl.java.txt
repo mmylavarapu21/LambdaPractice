@@ -1,0 +1,30 @@
+@Service
+public class CacheManagerImpl{
+
+	private static final long serialVersionUID = -6204348172287912584L;
+
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	
+	@Autowired
+	private CacheUtil cacheUtil;
+	
+	public boolean setValue(String key, String value) {
+		try {
+			if (cacheUtil.isRedisCacheEnabled()) {
+				redisTemplate.opsForValue().set(key, value);
+				return true;
+			}
+		} catch (Exception e) {
+			LOG.error(
+					"Exception occurred while setting Mapping data in Redis with Key: " + key + " and Value: " + value,
+					e);
+			return false;
+		}
+		return false;
+	}
+	
+}
+
+// Haven't Implemented the RedisApplicationConfig Class(where in I will declare all the Redis constants such as Max_Count, IdleTimeOut, e.t.c) and 
+CacheUtil Class where I will initialize the Redis using Jedis Client.
