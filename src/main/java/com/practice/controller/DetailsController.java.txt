@@ -1,4 +1,4 @@
-@Controller
+﻿@Controller
 
 public class DetailsController {
 
@@ -10,5 +10,6 @@ public @ResponseBody boolean createPersonData(@RequestBody JSONObject personData
 		return addPersonService.setPersonDetails(personData);	
 		}
 	}
+
 
 ‌
